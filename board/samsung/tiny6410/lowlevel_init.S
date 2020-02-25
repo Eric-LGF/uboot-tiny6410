@@ -51,16 +51,16 @@ _TEXT_BASE:
 lowlevel_init:
 	mov	r12, lr
 
-	/* LED on only #8 */
+	/* LED */
 	ldr	r0, =ELFIN_GPIO_BASE
-	ldr	r1, =0x55540000
-	str	r1, [r0, #GPNCON_OFFSET]
+	ldr	r1, =0x11110000
+	str	r1, [r0, #GPKCON_OFFSET]
 
-	ldr	r1, =0x55555555
-	str	r1, [r0, #GPNPUD_OFFSET]
+	ldr	r1, =0x0000aa55
+	str	r1, [r0, #GPKPUD_OFFSET]
 
-	ldr	r1, =0xf000
-	str	r1, [r0, #GPNDAT_OFFSET]
+	ldr	r1, =0x00a0
+	str	r1, [r0, #GPKDAT_OFFSET]
 
 	/* Disable Watchdog */
 	ldr	r0, =0x7e000000		@0x7e004000
