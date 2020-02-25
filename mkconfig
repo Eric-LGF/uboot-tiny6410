@@ -37,7 +37,7 @@ elif [ "${MAKEFLAGS+set}${MAKELEVEL+set}" = "setset" ] ; then
 	         mean removal of your board in the next release.
 
 	EOF
-	sleep 5
+#	sleep 5
 fi
 
 while [ $# -gt 0 ] ; do
