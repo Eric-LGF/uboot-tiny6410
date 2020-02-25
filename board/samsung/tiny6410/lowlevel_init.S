@@ -54,12 +54,12 @@ lowlevel_init:
 	/* LED */
 	ldr	r0, =ELFIN_GPIO_BASE
 	ldr	r1, =0x11110000
-	str	r1, [r0, #GPKCON_OFFSET]
+	str	r1, [r0, #GPKCON0_OFFSET]
 
-	ldr	r1, =0x0000aa55
+	ldr	r1, =0x5555aa55
 	str	r1, [r0, #GPKPUD_OFFSET]
 
-	ldr	r1, =0x00a0
+	ldr	r1, =0x000000a0
 	str	r1, [r0, #GPKDAT_OFFSET]
 
 	/* Disable Watchdog */
