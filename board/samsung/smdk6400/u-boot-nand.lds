@@ -48,12 +48,12 @@ SECTIONS
 	.got : { *(.got) }
 
 
-	. = align(4);
+	. = ALIGN(4);
 	.u_boot_list : {
 		#include <u-boot.lst>
 	}
 
-	. = align(4);
+	. = ALIGN(4);
 	.mmudata : { *(.mmudata) }
 
 	. = ALIGN(4);

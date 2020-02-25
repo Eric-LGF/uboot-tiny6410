@@ -1,0 +1,18 @@
+{
+    "files.watcherExclude": {
+        "**/api/**": true,
+        "**/common/**": true,
+        "**/disk/**": true,
+        "**/doc/**": true,
+        "**/drivers/**": true,
+        "**/examples/**": true,
+        "**/fs/**": true,
+        "**/lib/**": true,
+        "**/post/**": true,
+        "**/tools/**": true,
+        "**/net/**": true
+    },
+    "files.associations": {
+        "common.h": "c"
+    }
+}
