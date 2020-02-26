@@ -45,7 +45,7 @@
 #define CONFIG_PERIPORT_SIZE	0x13
 
 #define CONFIG_SYS_IRAM_BASE    0x0c000000  /* Internal SRAM base address */
-#define CONFIG_SYS_IRAM_SIZE    0x2000      /* 8 KB of internal SRAM memory */
+#define CONFIG_SYS_IRAM_SIZE    0x1000      /* 4 KB of internal SRAM memory */
 #define CONFIG_SYS_IRAM_END     (CONFIG_SYS_IRAM_BASE + CONFIG_SYS_IRAM_SIZE)
 #define CONFIG_SYS_INIT_SP_ADDR (CONFIG_SYS_IRAM_END - GENERATED_GBL_DATA_SIZE)
 
@@ -196,7 +196,7 @@
 #define CONFIG_IDENT_STRING	" for TINY6410"
 
 /* base address for uboot */
-#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0x07e00000)
+#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0)
 /* total memory available to uboot */
 #define CONFIG_SYS_UBOOT_SIZE		(1024 * 1024)
 
@@ -214,7 +214,7 @@
 #endif
 
 /* NAND U-Boot load and start address */
-#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SYS_MAPPED_RAM_BASE + 0x07e00000)
+#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SYS_MAPPED_RAM_BASE + 0)
 
 #define CONFIG_ENV_OFFSET		0x0040000
 
