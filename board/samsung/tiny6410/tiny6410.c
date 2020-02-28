@@ -94,7 +94,7 @@ int dram_init(void)
 #ifdef CONFIG_DISPLAY_BOARDINFO
 int checkboard(void)
 {
-	printf("Board:   SMDK6400\n");
+	printf("Board:   TINY6400\n");
 	return 0;
 }
 #endif

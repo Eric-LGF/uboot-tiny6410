@@ -50,9 +50,9 @@ _TEXT_BASE:
 led_test:
 	mov	r12, lr
 	
-	ldr	r0, =0x7F008808
-	ldr	r1, =0
-	str	r1, [r0]
+	ldr	r1, =0x7F008808
+	@ ldr	r1, =0
+	str	r0, [r1]
 
 	mov	lr, r12
 	mov	pc, lr
@@ -103,7 +103,6 @@ lowlevel_init:
 
 	/* init system clock */	/* 该调用存在问题，导致系统不继续往下运行 */
 	bl system_clock_init
-	bl led_test
 
 #ifndef CONFIG_NAND_SPL
 	/* for UART */
@@ -268,7 +267,7 @@ wait_for_async:
 uart_asm_init:
 	/* set GPIO to enable UART */
 	ldr	r0, =ELFIN_GPIO_BASE
-	ldr	r1, =0x220022
+	ldr	r1, =0x22222222
 	str	r1, [r0, #GPACON_OFFSET]
 	mov	pc, lr
 #endif
