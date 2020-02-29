@@ -171,7 +171,8 @@
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
-#define CONFIG_SYS_MAX_FLASH_BANKS	1	/* max number of memory banks	*/
+// #define CONFIG_SYS_NO_FLASH
+#define CONFIG_SYS_MAX_FLASH_BANKS	0	/* max number of memory banks	*/
 /* AM29LV160B has 35 sectors, AM29LV800B - 19 */
 #define CONFIG_SYS_MAX_FLASH_SECT	40
 

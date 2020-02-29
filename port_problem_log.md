@@ -1,10 +1,85 @@
 # 移植过程中，出现的一些问题记录
 
+## 2020/02/29 - flash初始化失败
+
+### 问题描述：
+
+系统日志：
+```
+U-Boot 2013.01-00007-g3250eff2a0-dirty (Feb 28 2020 - 15:19:35) for TINY6410
+
+U-Boot code: 50000000 -> 5003DB08  BSS: -> 50082164
+
+CPU:     S3C6400@532MHz
+         Fclk = 532MHz, Hclk = 133MHz, Pclk = 66MHz (ASYNC Mode) 
+Board:   TINY6400
+monitor len: 00082164
+ramsize: 08000000
+TLB table from 57ff0000 to 57ff4000
+Top of RAM usable for U-Boot at: 57ff0000
+Reserving 520k for U-Boot at: 57f6d000
+Reserving 1056k for malloc() at: 57e65000
+Reserving 32 Bytes for Board Info at: 57e64fe0
+Reserving 128 Bytes for Global Data at: 57e64f60
+New Stack Pointer is: 57e64f50
+RAM Configuration:
+Bank #0: 50000000 128 MiB
+relocation Offset is: 07f6d000
+WARNING: Caches not enabled
+monitor flash len: 00044648
+Now running in RAM - U-Boot at: 57f6d000
+Flash: fwc addr 10000000 cmd f0 00f0 16bit x 16 bit
+fwc addr 1000aaaa cmd aa 00aa 16bit x 16 bit
+fwc addr 10005554 cmd 55 0055 16bit x 16 bit
+fwc addr 1000aaaa cmd 90 0090 16bit x 16 bit
+fwc addr 10000000 cmd f0 00f0 16bit x 16 bit
+JEDEC PROBE: ID 0 0 0
+fwc addr 10000000 cmd ff 00ff 16bit x 16 bit
+fwc addr 10000000 cmd 90 0090 16bit x 16 bit
+fwc addr 10000000 cmd ff 00ff 16bit x 16 bit
+JEDEC PROBE: ID 0 0 0
+*** failed ***
+### ERROR ### Please RESET the board ###
+```
+
+### 问题定位
+
+查看代码，在flash_init()调用中返回flash_size=0，导致后续的代码判断进行系统报错与挂起。
+
+### 问题解决
+
+根据代码可以定义宏CONFIG_SYS_NO_FLASH，去除norflash的相关代码，但由于uboot其他地方牵扯到该部分，造成报错，因此目前先保留norflash代码，并在board_init_r函数中修改flash_init()返回值判断，使得flash_size等于0也不进行报错。
+```c
+flash_size = flash_init();
+	if (flash_size >= 0) {			/* flash_size等于0时，也认为系统是正常的 */
+# ifdef CONFIG_SYS_FLASH_CHECKSUM
+		print_size(flash_size, "");
+		/*
+		 * Compute and print flash CRC if flashchecksum is set to 'y'
+		 *
+		 * NOTE: Maybe we should add some WATCHDOG_RESET()? XXX
+		 */
+		if (getenv_yesno("flashchecksum") == 1) {
+			printf("  CRC: %08X", crc32(0,
+				(const unsigned char *) CONFIG_SYS_FLASH_BASE,
+				flash_size));
+		}
+		putc('\n');
+# else	/* !CONFIG_SYS_FLASH_CHECKSUM */
+		print_size(flash_size, "\n");
+# endif /* CONFIG_SYS_FLASH_CHECKSUM */
+	} else {
+		puts(failed);
+		hang();
+	}
+```
+
+
 ## 2020/02/28 - 串口不输出问题
 
 问题描述：串口通信会一直卡在串口发送完成标志判断的while循环中
 
-```
+```c
 static void s3c64xx_serial_putc(const char c)
 {
 	s3c64xx_uart *const uart = s3c64xx_get_base_uart(UART_NR);
