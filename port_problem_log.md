@@ -1,5 +1,60 @@
 # 移植过程中，出现的一些问题记录
 
+## 2020/02/29 - raise: Signal # 8 caught问题
+
+### 问题描述:
+
+系统运行过程中会不断的打印“raise: Signal # 8 caught”
+
+系统日志：
+```
+U-Boot 2013.01-00008-ga1e7b04d3d-dirty (Feb 29 2020 - 18:53:03) for TINY6410
+
+
+CPU:     S3C6400@532MHz
+         Fclk = 532MHz, Hclk = 133MHz, Pclk = 66MHz (ASYNC Mode) 
+Board:   TINY6400
+DRAM:  128 MiB
+WARNING: Caches not enabled
+Flash: 0 Bytes
+NAND:  raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+256 MiB
+*** Warning - bad CRC, using default environment
+
+In:    serial
+Out:   serial
+Err:   serial
+Net:   CS8900-0
+Hit any key to stop autoboot:  0 
+
+NAND read: device 0 offset 0x60000, size 0x1c0000
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+raise: Signal # 8 caught
+```
+
+### 问题解决
+
+参考这个[网址](https://www.cnblogs.com/lucky-tom/p/3527299.html)，可暂时解决这个问题
+
+但autoboot倒计时的速度会加快，这里先将倒计时更改为30
+（修改include/configs/tiny6410.h中的宏CONFIG_BOOTDELAY）
+
+
 ## 2020/02/29 - flash初始化失败
 
 ### 问题描述：

@@ -138,7 +138,7 @@ ulong get_tbclk(void)
 ulong get_timer_masked(void)
 {
 	unsigned long long res = get_ticks();
-	do_div (res, (timer_load_val / (100 * CONFIG_SYS_HZ)));
+	// do_div (res, (timer_load_val / (100 * CONFIG_SYS_HZ)));
 	return res;
 }
 
