@@ -1,5 +1,23 @@
 # 移植过程中，出现的一些问题记录
 
+## 2020/03/01 - 解决raise: Signal # 8 caught问题
+
+### 问题描述：
+
+上个版本临时解决了raise: Signal # 8 caught问题，但是这种方法会使得但autoboot倒计时的速度会加快，这个版本将解决这个问题
+
+### 问题解决：
+
+该问题解决参考了[网址](https://blog.csdn.net/zhaocj/article/details/6667758),同时对比了本工程文件(arch/arm/cpu/arm920t/s3c24x0/timer.c)
+
+本次主要在arch/arm/cpu/arm176/s3c64xx/timer.c进行了一些变量替换,如下：
+
+- 添加全局数据变量定义DECLARE_GLOBAL_DATA_PTR
+- timer_load_val替换为gd-tbu
+- lastdec替换为gd->lastinc
+- timestamp替换为gd->tbl
+
+
 ## 2020/02/29 - raise: Signal # 8 caught问题
 
 ### 问题描述:
