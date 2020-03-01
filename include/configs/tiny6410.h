@@ -78,9 +78,22 @@
 /*
  * Hardware drivers
  */
-#define CONFIG_CS8900			/* we have a CS8900 on-board	*/
-#define CONFIG_CS8900_BASE	  	0x18800300
-#define CONFIG_CS8900_BUS16		/* follow the Linux driver	*/
+#define CONFIG_DM9000
+#define CONFIG_DRIVER_DM9000
+// #define CONFIG_DRIVER_DM9000_NO_EEPROM	1	/* 工程中未用到，先注释 */
+// #define CONFIG_DM9000_USE_16BIT 1			/* 工程中未用到，先注释 */
+#define CONFIG_DM9000_BASE				0x18000300
+#define DM9000_IO 						CONFIG_DM9000_BASE
+#define DM9000_DATA						(CONFIG_DM9000_BASE+4)
+
+/*
+ * U-Boot 网络环境变量定义
+ */
+#define CONFIG_ETHADDR		08:90:90:90:90:90
+#define CONFIG_IPADDR		192.168.1.100
+#define CONFIG_SERVERIP		192.168.1.10
+#define CONFIG_GATEWAYIP	192.168.1.10
+#define CONFIG_NETMASK		255.255.255.0
 
 /*
  * select serial console configuration
