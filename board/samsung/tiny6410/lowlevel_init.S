@@ -46,6 +46,16 @@
 
 _TEXT_BASE:
 	.word	CONFIG_SYS_TEXT_BASE
+	.globl	led_test
+led_test:
+	mov	r12, lr
+	
+	ldr	r1, =0x7F008808
+	@ ldr	r1, =0
+	str	r0, [r1]
+
+	mov	lr, r12
+	mov	pc, lr
 
 	.globl lowlevel_init
 lowlevel_init:
@@ -91,7 +101,7 @@ lowlevel_init:
 	str	r3, [r0, #oVECTADDR]
 	str	r3, [r1, #oVECTADDR]
 
-	/* init system clock */
+	/* init system clock */	/* 该调用存在问题，导致系统不继续往下运行 */
 	bl system_clock_init
 
 #ifndef CONFIG_NAND_SPL
@@ -121,6 +131,7 @@ lowlevel_init:
 	beq	wakeup_reset
 
 1:
+lv_exit:
 	mov	lr, r12
 	mov	pc, lr
 
@@ -184,7 +195,6 @@ check_syncack:
 	 * This was unconditional in original Samsung sources, but it doesn't
 	 * seem to make much sense on S3C6400.
 	 */
-#ifndef CONFIG_S3C6400
 	ldr	r1, [r0, #OTHERS_OFFSET]
 	bic	r1, r1, #0xC0
 	orr	r1, r1, #0x40
@@ -195,7 +205,6 @@ wait_for_async:
 	and	r1, r1, #0xf00
 	cmp	r1, #0x0
 	bne	wait_for_async
-#endif
 
 	ldr	r1, [r0, #OTHERS_OFFSET]
 	bic	r1, r1, #0x40
@@ -258,7 +267,7 @@ wait_for_async:
 uart_asm_init:
 	/* set GPIO to enable UART */
 	ldr	r0, =ELFIN_GPIO_BASE
-	ldr	r1, =0x220022
+	ldr	r1, =0x22222222
 	str	r1, [r0, #GPACON_OFFSET]
 	mov	pc, lr
 #endif

@@ -97,7 +97,10 @@ static int s3c64xx_serial_init(void)
 	/* 8N1 */
 	uart->ULCON = 3;
 	/* No interrupts, no DMA, pure polling */
-	uart->UCON = 5;
+	if (uart->UCON & 0xC00 == 0xC00)
+		uart->UCON = (2<<10) | 0x5;
+	else
+		uart->UCON = 5;
 
 	serial_setbrg();
 

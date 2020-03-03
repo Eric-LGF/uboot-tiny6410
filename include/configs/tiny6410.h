@@ -45,7 +45,7 @@
 #define CONFIG_PERIPORT_SIZE	0x13
 
 #define CONFIG_SYS_IRAM_BASE    0x0c000000  /* Internal SRAM base address */
-#define CONFIG_SYS_IRAM_SIZE    0x2000      /* 8 KB of internal SRAM memory */
+#define CONFIG_SYS_IRAM_SIZE    0x1000      /* 4 KB of internal SRAM memory */
 #define CONFIG_SYS_IRAM_END     (CONFIG_SYS_IRAM_BASE + CONFIG_SYS_IRAM_SIZE)
 #define CONFIG_SYS_INIT_SP_ADDR (CONFIG_SYS_IRAM_END - GENERATED_GBL_DATA_SIZE)
 
@@ -65,7 +65,7 @@
 /*
  * Architecture magic and machine type
  */
-#define CONFIG_MACH_TYPE		1270
+#define CONFIG_MACH_TYPE		2520
 
 #define CONFIG_DISPLAY_CPUINFO
 #define CONFIG_DISPLAY_BOARDINFO
@@ -78,9 +78,22 @@
 /*
  * Hardware drivers
  */
-#define CONFIG_CS8900			/* we have a CS8900 on-board	*/
-#define CONFIG_CS8900_BASE	  	0x18800300
-#define CONFIG_CS8900_BUS16		/* follow the Linux driver	*/
+#define CONFIG_DM9000
+#define CONFIG_DRIVER_DM9000
+// #define CONFIG_DRIVER_DM9000_NO_EEPROM	1	/* 工程中未用到，先注释 */
+// #define CONFIG_DM9000_USE_16BIT 1			/* 工程中未用到，先注释 */
+#define CONFIG_DM9000_BASE				0x18000300
+#define DM9000_IO 						CONFIG_DM9000_BASE
+#define DM9000_DATA						(CONFIG_DM9000_BASE+4)
+
+/*
+ * U-Boot 网络环境变量定义
+ */
+#define CONFIG_ETHADDR		08:90:90:90:90:90
+#define CONFIG_IPADDR		192.168.1.100
+#define CONFIG_SERVERIP		192.168.1.10
+#define CONFIG_GATEWAYIP	192.168.1.10
+#define CONFIG_NETMASK		255.255.255.0
 
 /*
  * select serial console configuration
@@ -171,7 +184,8 @@
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
-#define CONFIG_SYS_MAX_FLASH_BANKS	1	/* max number of memory banks	*/
+// #define CONFIG_SYS_NO_FLASH
+#define CONFIG_SYS_MAX_FLASH_BANKS	0	/* max number of memory banks	*/
 /* AM29LV160B has 35 sectors, AM29LV800B - 19 */
 #define CONFIG_SYS_MAX_FLASH_SECT	40
 
@@ -196,7 +210,7 @@
 #define CONFIG_IDENT_STRING	" for TINY6410"
 
 /* base address for uboot */
-#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0x07e00000)
+#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0)
 /* total memory available to uboot */
 #define CONFIG_SYS_UBOOT_SIZE		(1024 * 1024)
 
@@ -209,12 +223,13 @@
 				"bootm 0xc0018000"
 #else
 #define CONFIG_SYS_MAPPED_RAM_BASE	CONFIG_SYS_SDRAM_BASE
-#define CONFIG_BOOTCOMMAND	"nand read 0x50018000 0x60000 0x1c0000;" \
-				"bootm 0x50018000"
+// #define CONFIG_BOOTCOMMAND	"nand read 0x50018000 0x60000 0x1c0000;" \
+// 				"bootm 0x50018000"
+#define CONFIG_BOOTCOMMAND	"tftp 50000000 u-boot-spl.bin;go 50000000"
 #endif
 
 /* NAND U-Boot load and start address */
-#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SYS_MAPPED_RAM_BASE + 0x07e00000)
+#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SYS_MAPPED_RAM_BASE + 0)
 
 #define CONFIG_ENV_OFFSET		0x0040000
 

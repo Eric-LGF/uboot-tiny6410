@@ -439,6 +439,7 @@ $(obj)u-boot.srec:	$(obj)u-boot
 $(obj)u-boot.bin:	$(obj)u-boot
 		$(OBJCOPY) ${OBJCFLAGS} -O binary $< $@
 		$(BOARD_SIZE_CHECK)
+		cp $(obj)u-boot.bin ~/tftpboot/
 
 $(obj)u-boot.ldr:	$(obj)u-boot
 		$(CREATE_LDR_ENV)
@@ -810,9 +811,9 @@ tiny6410_config	:	unconfig
 	@echo "#define CONFIG_NAND_U_BOOT" > $(obj)include/config.h
 	@echo "CONFIG_NAND_U_BOOT = y" >> $(obj)include/config.mk
 	@if [ -z "$(findstring tiny6410_noUSB_config,$@)" ]; then			\
-		echo "RAM_TEXT = 0x57e00000" >> $(obj)board/samsung/tiny6410/config.tmp;\
+		echo "RAM_TEXT = 0x50000000" >> $(obj)board/samsung/tiny6410/config.tmp;\
 	else										\
-		echo "RAM_TEXT = 0xc7e00000" >> $(obj)board/samsung/tiny6410/config.tmp;\
+		echo "RAM_TEXT = 0xc0000000" >> $(obj)board/samsung/tiny6410/config.tmp;\
 	fi
 	@$(MKCONFIG) tiny6410 arm arm1176 tiny6410 samsung s3c64xx
 	@echo "CONFIG_NAND_U_BOOT = y" >> $(obj)include/config.mk
