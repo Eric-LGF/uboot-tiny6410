@@ -600,6 +600,7 @@ $(obj)u-boot.lds: $(LDSCRIPT) $(obj)include/u-boot.lst
 
 nand_spl:	$(TIMESTAMP_FILE) $(VERSION_FILE) depend
 		$(MAKE) -C nand_spl/board/$(BOARDDIR) all
+		cp nand_spl/u-boot-spl.bin ~/tftpboot/
 
 $(obj)u-boot-nand.bin:	nand_spl $(obj)u-boot.bin
 		cat $(obj)nand_spl/u-boot-spl-16k.bin $(obj)u-boot.bin > $(obj)u-boot-nand.bin
