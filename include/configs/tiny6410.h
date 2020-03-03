@@ -210,7 +210,7 @@
 #define CONFIG_IDENT_STRING	" for TINY6410"
 
 /* base address for uboot */
-#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0)
+#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0x07e00000)
 /* total memory available to uboot */
 #define CONFIG_SYS_UBOOT_SIZE		(1024 * 1024)
 
