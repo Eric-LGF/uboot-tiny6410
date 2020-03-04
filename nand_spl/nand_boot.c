@@ -257,7 +257,7 @@ void nand_boot(void)
 	struct nand_chip nand_chip;
 	nand_info_t nand_info;
 	__attribute__((noreturn)) void (*uboot)(void);
-led_test(0xf0);
+
 	/*
 	 * Init board specific nand support
 	 */
@@ -270,26 +270,27 @@ led_test(0xf0);
 
 	if (nand_chip.select_chip){
 		nand_chip.select_chip(&nand_info, 0);}
-led_test(0x20);
+
 	/*
 	 * Load U-Boot image from NAND into RAM
 	 */
 	nand_load(&nand_info, CONFIG_SYS_NAND_U_BOOT_OFFS, CONFIG_SYS_NAND_U_BOOT_SIZE,
 		  (uchar *)CONFIG_SYS_NAND_U_BOOT_DST);
-led_test(0x40);
-// #ifdef CONFIG_NAND_ENV_DST
-// 	nand_load(&nand_info, CONFIG_ENV_OFFSET, CONFIG_ENV_SIZE,
-// 		  (uchar *)CONFIG_NAND_ENV_DST);
 
-// #ifdef CONFIG_ENV_OFFSET_REDUND
-// 	nand_load(&nand_info, CONFIG_ENV_OFFSET_REDUND, CONFIG_ENV_SIZE,
-// 		  (uchar *)CONFIG_NAND_ENV_DST + CONFIG_ENV_SIZE);
-// #endif
-// #endif
-led_test(0xc0);
+#ifdef CONFIG_NAND_ENV_DST
+	nand_load(&nand_info, CONFIG_ENV_OFFSET, CONFIG_ENV_SIZE,
+		  (uchar *)CONFIG_NAND_ENV_DST);
+
+#ifdef CONFIG_ENV_OFFSET_REDUND
+	nand_load(&nand_info, CONFIG_ENV_OFFSET_REDUND, CONFIG_ENV_SIZE,
+		  (uchar *)CONFIG_NAND_ENV_DST + CONFIG_ENV_SIZE);
+#endif
+#endif
+
 	if (nand_chip.select_chip)
 		nand_chip.select_chip(&nand_info, -1);
-led_test(0x30);
+
+	led_test(0);
 
 	/*
 	 * Jump to U-Boot image
