@@ -65,7 +65,7 @@ static void print_oob(const char *header, struct mtd_info *mtd)
 static void s3c_nand_select_chip(struct mtd_info *mtd, int chip)
 {
 	int ctrl = readl(NFCONT);
-
+led_test(0xe0);
 	switch (chip) {
 	case -1:
 		ctrl |= 6;

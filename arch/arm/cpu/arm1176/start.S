@@ -255,9 +255,6 @@ copy_loop:
 	cmp	r0, r2			/* until source end address [r2]    */
 	blo	copy_loop
 
-	/* LED调试 */
-	mov	r0, #0
-	bl	led_test
 #ifndef CONFIG_SPL_BUILD
 	/*
 	 * fix .rel.dyn relocations

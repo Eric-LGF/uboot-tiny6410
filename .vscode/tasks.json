@@ -10,6 +10,19 @@
             "group": {
                 "kind": "build",
                 "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "build-spl",
+            "type": "shell",
+            "command": [
+                "make",
+                "nand_spl"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
             }
         },
         {
