@@ -268,8 +268,8 @@ void nand_boot(void)
 	nand_chip.options = 0;
 	board_nand_init(&nand_chip);
 
-	if (nand_chip.select_chip)
-		nand_chip.select_chip(&nand_info, 0);
+	if (nand_chip.select_chip){
+		nand_chip.select_chip(&nand_info, 0);}
 
 	/*
 	 * Load U-Boot image from NAND into RAM
@@ -290,9 +290,16 @@ void nand_boot(void)
 	if (nand_chip.select_chip)
 		nand_chip.select_chip(&nand_info, -1);
 
+	led_test(0);
+
 	/*
 	 * Jump to U-Boot image
 	 */
 	uboot = (void *)CONFIG_SYS_NAND_U_BOOT_START;
 	(*uboot)();
+}
+
+void led_delay(unsigned int t)
+{
+	while (t--);
 }

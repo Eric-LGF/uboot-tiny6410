@@ -601,6 +601,8 @@ $(obj)u-boot.lds: $(LDSCRIPT) $(obj)include/u-boot.lst
 
 nand_spl:	$(TIMESTAMP_FILE) $(VERSION_FILE) depend
 		$(MAKE) -C nand_spl/board/$(BOARDDIR) all
+		$(OBJDUMP) -d nand_spl/u-boot-spl > nand_spl/u-boot-spl.dis
+		cp nand_spl/u-boot-spl.bin ~/tftpboot/
 
 $(obj)u-boot-nand.bin:	nand_spl $(obj)u-boot.bin
 		cat $(obj)nand_spl/u-boot-spl-16k.bin $(obj)u-boot.bin > $(obj)u-boot-nand.bin
@@ -810,9 +812,9 @@ tiny6410_config	:	unconfig
 	@echo "#define CONFIG_NAND_U_BOOT" > $(obj)include/config.h
 	@echo "CONFIG_NAND_U_BOOT = y" >> $(obj)include/config.mk
 	@if [ -z "$(findstring tiny6410_noUSB_config,$@)" ]; then			\
-		echo "RAM_TEXT = 0x50000000" >> $(obj)board/samsung/tiny6410/config.tmp;\
+		echo "RAM_TEXT = 0x57e00000" >> $(obj)board/samsung/tiny6410/config.tmp;\
 	else										\
-		echo "RAM_TEXT = 0xc0000000" >> $(obj)board/samsung/tiny6410/config.tmp;\
+		echo "RAM_TEXT = 0xc7e00000" >> $(obj)board/samsung/tiny6410/config.tmp;\
 	fi
 	@$(MKCONFIG) tiny6410 arm arm1176 tiny6410 samsung s3c64xx
 	@echo "CONFIG_NAND_U_BOOT = y" >> $(obj)include/config.mk
