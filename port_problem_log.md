@@ -1,5 +1,131 @@
 # 移植过程中，出现的一些问题记录
 
+## 链接地址对比
+
+以下链接地址有两个选项：
+- 0x57e00000 uboot源码中默认的地址
+- 0x50000000 自定义 开始为了方便下载到DRAM中调试用的
+
+更改链接地址，修改修改以下文件内容
+1. Makefile中的RAM_TEXT值, MMU部分先不管
+```Makefile
+#	链接地址为0x50000000, RAM_TEXT = 0x50000000
+#	链接地址为0x57E00000, RAM_TEXT = 0x57E00000
+
+tiny6410_noUSB_config	\
+tiny6410_config	:	unconfig
+	@mkdir -p $(obj)include $(obj)board/samsung/tiny6410
+	@mkdir -p $(obj)nand_spl/board/samsung/tiny6410
+	@echo "#define CONFIG_NAND_U_BOOT" > $(obj)include/config.h
+	@echo "CONFIG_NAND_U_BOOT = y" >> $(obj)include/config.mk
+	@if [ -z "$(findstring tiny6410_noUSB_config,$@)" ]; then			\
+		echo "RAM_TEXT = 0x50000000" >> $(obj)board/samsung/tiny6410/config.tmp;\
+	else										\
+		echo "RAM_TEXT = 0xc0000000" >> $(obj)board/samsung/tiny6410/config.tmp;\
+	fi
+	@$(MKCONFIG) tiny6410 arm arm1176 tiny6410 samsung s3c64xx
+	@echo "CONFIG_NAND_U_BOOT = y" >> $(obj)include/config.mk
+
+```
+
+2. 开发板配置文件，比如：include/configs/tiny6410.h
+
+```c
+// 链接地址为0x50000000
+#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0)
+#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SYS_MAPPED_RAM_BASE + 0)
+
+// 链接地址为0x57e00000
+#define CONFIG_SYS_PHY_UBOOT_BASE	(CONFIG_SYS_SDRAM_BASE + 0x7e00000)
+#define CONFIG_SYS_UBOOT_BASE		(CONFIG_SYS_MAPPED_RAM_BASE + 0x7e00000)
+```
+
+在arch/arm/lib/board.c文件中添加调试宏，uboot日志中可输出重定向的地址信息
+```c
+#define DEBUG	// 必须定义在#include <common.h>前面
+#include <common.h>
+```
+
+### 链接地址设置为0x50000000
+
+```
+U-Boot 2013.01-00019-g63fcc9ead7-dirty (Mar 05 2020 - 16:32:39) for TINY6410
+
+U-Boot code: 50000000 -> 50038A38  BSS: -> 5007C860
+
+CPU:     S3C6410@532MHz
+         Fclk = 532MHz, Hclk = 133MHz, Pclk = 66MHz (ASYNC Mode) 
+Board:   TINY6400
+monitor len: 0007C860
+ramsize: 08000000
+TLB table from 57ff0000 to 57ff4000
+Top of RAM usable for U-Boot at: 57ff0000
+Reserving 498k for U-Boot at: 57f73000
+Reserving 1056k for malloc() at: 57e6b000
+Reserving 32 Bytes for Board Info at: 57e6afe0
+Reserving 128 Bytes for Global Data at: 57e6af60
+New Stack Pointer is: 57e6af50
+RAM Configuration:
+Bank #0: 50000000 128 MiB
+relocation Offset is: 07f73000
+WARNING: Caches not enabled
+monitor flash len: 0003E8C8
+Now running in RAM - U-Boot at: 57f73000
+Flash: 0 Bytes
+NAND:  256 MiB
+*** Warning - bad CRC, using default environment
+
+In:    serial
+Out:   serial
+Err:   serial
+Net:   dm9000
+Hit any key to stop autoboot:  0 
+```
+
+### 链接地址设置为0x57e00000
+
+```
+U-Boot 2013.01-00019-g63fcc9ead7-dirty (Mar 05 2020 - 16:38:39) for TINY6410
+
+U-Boot code: 57E00000 -> 57E38A38  BSS: -> 57E7C860
+
+CPU:     S3C6410@532MHz
+         Fclk = 532MHz, Hclk = 133MHz, Pclk = 66MHz (ASYNC Mode) 
+Board:   TINY6400
+monitor len: 0007C860
+ramsize: 08000000
+TLB table from 57ff0000 to 57ff4000
+Top of RAM usable for U-Boot at: 57ff0000
+Reserving 498k for U-Boot at: 57f73000
+Reserving 1056k for malloc() at: 57e6b000
+Reserving 32 Bytes for Board Info at: 57e6afe0
+Reserving 128 Bytes for Global Data at: 57e6af60
+New Stack Pointer is: 57e6af50
+RAM Configuration:
+Bank #0: 50000000 128 MiB
+relocation Offset is: 00173000
+WARNING: Caches not enabled
+monitor flash len: 0003E8C8
+Now running in RAM - U-Boot at: 57f73000
+Flash: 0 Bytes
+NAND:  256 MiB
+*** Warning - bad CRC, using default environment
+
+In:    serial
+Out:   serial
+Err:   serial
+Net:   dm9000
+Hit any key to stop autoboot:  0 
+```
+---
+根据日志可以发现，不管选择哪个地址，uboot都会重定向到RAM的高端地址处，该地址是根据配置参数计算得到的，因此配置参数不变，重定向后的运行位置就不变（该部分代码见函数board_init_f对gd变量的赋值）
+```
+Now running in RAM - U-Boot at: 57f73000
+```
+**因此在后续移植过程，可将uboot链接地址设置为0x50000000，也是为了方便直接下载到ram调试。**
+
+*我也尝试过将链接地址为0x57e00000的uboot下载到0x50000000运行试试，似乎无法正常运行，可能是代码搬移过程，地址偏移计算会出错（该部分尚未进行分析）我之前测试日志中显示，代码到board_init_f之后才出问题的。*
+
 ## 2020/03/01 - 解决raise: Signal # 8 caught问题
 
 ### 问题描述：
