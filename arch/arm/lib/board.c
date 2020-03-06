@@ -568,7 +568,7 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	puts("Flash: ");
 
 	flash_size = flash_init();
-	if (flash_size >= 0) {
+	if (flash_size > 0) {
 # ifdef CONFIG_SYS_FLASH_CHECKSUM
 		print_size(flash_size, "");
 		/*

@@ -173,7 +173,7 @@
 #define CONFIG_SYNC_MODE
 */
 
-/* SMDK6400 has 2 banks of DRAM, but we use only one in U-Boot */
+/* TINY6410 has 2 banks of DRAM, but we use only one in U-Boot */
 #define CONFIG_NR_DRAM_BANKS	1
 #define PHYS_SDRAM_1		CONFIG_SYS_SDRAM_BASE	/* SDRAM Bank #1	*/
 #define PHYS_SDRAM_1_SIZE	0x08000000	/* 128 MB in Bank #1	*/
@@ -184,27 +184,13 @@
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
-// #define CONFIG_SYS_NO_FLASH
-#define CONFIG_SYS_MAX_FLASH_BANKS	0	/* max number of memory banks	*/
-/* AM29LV160B has 35 sectors, AM29LV800B - 19 */
-#define CONFIG_SYS_MAX_FLASH_SECT	40
+// #define CONFIG_SYS_NO_FLASH 		// 在board/samsung/tiny6410/config.mk中定义
 
-#define CONFIG_AMD_LV800
-#define CONFIG_SYS_FLASH_CFI		1	/* Use CFI parameters (needed?) */
-/* Use drivers/cfi_flash.c, even though the flash is not CFI-compliant	*/
-#define CONFIG_FLASH_CFI_DRIVER	1
-#define CONFIG_SYS_FLASH_CFI_WIDTH	FLASH_CFI_16BIT
-#define CONFIG_FLASH_CFI_LEGACY
-#define CONFIG_SYS_FLASH_LEGACY_512Kx16
-
-/* timeout values are in ticks */
-#define CONFIG_SYS_FLASH_ERASE_TOUT	(5 * CONFIG_SYS_HZ) /* Timeout for Flash Erase	*/
-#define CONFIG_SYS_FLASH_WRITE_TOUT	(5 * CONFIG_SYS_HZ) /* Timeout for Flash Write	*/
 
 #define CONFIG_ENV_SIZE		0x4000	/* Total Size of Environment Sector */
 
 /*
- * SMDK6400 board specific data
+ * TINY6410 board specific data
  */
 
 #define CONFIG_IDENT_STRING	" for TINY6410"

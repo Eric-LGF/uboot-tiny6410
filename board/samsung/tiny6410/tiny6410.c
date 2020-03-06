@@ -103,6 +103,7 @@ ulong virt_to_phy_smdk6400(ulong addr)
 }
 #endif
 
+#ifndef CONFIG_SYS_NO_FLASH
 ulong board_flash_get_legacy (ulong base, int banknum, flash_info_t *info)
 {
 	if (banknum == 0) {	/* non-CFI boot flash */
@@ -113,6 +114,7 @@ ulong board_flash_get_legacy (ulong base, int banknum, flash_info_t *info)
 	} else
 		return 0;
 }
+#endif
 
 #ifdef CONFIG_CMD_NET
 int board_eth_init(bd_t *bis)

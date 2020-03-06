@@ -90,7 +90,7 @@ lowlevel_init:
 	str	r3, [r0, #oVECTADDR]
 	str	r3, [r1, #oVECTADDR]
 
-	/* init system clock */	/* 该调用存在问题，导致系统不继续往下运行 */
+	/* init system clock */
 	bl system_clock_init
 
 #ifndef CONFIG_NAND_SPL
@@ -120,7 +120,6 @@ lowlevel_init:
 	beq	wakeup_reset
 
 1:
-lv_exit:
 	mov	lr, r12
 	mov	pc, lr
 

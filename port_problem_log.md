@@ -1,6 +1,60 @@
 # 移植过程中，出现的一些问题记录
 
-## 链接地址对比
+## 2020/03/06 - 修复定义宏定义CONFIG_SYS_NO_FLASH，造成uboot编译报错问题
+
+### 问题描述
+
+在之前的记录“2020/02/29 - flash初始化失败”中已经记录了，该问题的目的。tiny6410中不存在nor flash，因此不需要进行flash_init。
+但是由于uboot的一些bug导致定义CONFIG_SYS_NO_FLASH后，编译会不通过
+
+编译日志中会出现如下错误
+```
+In file included from cmd_bootm.c:81:
+/home/eric/linux-develop/u-boot/include/mtd/cfi_flash.h:181: error: expected ')' before '*' token
+cmd_bootm.c:82: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'flash_info'
+cmd_bootm.c: In function 'do_imls':
+cmd_bootm.c:1197: error: 'flash_info_t' undeclared (first use in this function)
+cmd_bootm.c:1197: error: (Each undeclared identifier is reported only once
+cmd_bootm.c:1197: error: for each function it appears in.)
+cmd_bootm.c:1197: error: 'info' undeclared (first use in this function)
+cmd_bootm.c:1201: error: 'flash_info' undeclared (first use in this function)
+cmd_bootm.c:1202: error: 'CONFIG_SYS_MAX_FLASH_BANKS' undeclared (first use in this function)
+cmd_bootm.c:1204: error: 'FLASH_UNKNOWN' undeclared (first use in this function)
+```
+
+### 问题解决
+
+1. 宏CONFIG_SYS_NO_FLASH定义位置修改
+
+在board/samsung/tiny6410/config.mk文件中，添加如下语句.
+```makefile
+PLATFORM_CPPFLAGS += -DCONFIG_SYS_NO_FLASH
+```
+将宏CONFIG_SYS_NO_FLASH定义到编译选项中，这样才能让文件include/config_cmd_default.h中的以下语句生效，仅仅定义在tiny6410.h文件中是不行的。
+```c
+#ifndef CONFIG_SYS_NO_FLASH
+#define CONFIG_CMD_FLASH	/* flinfo, erase, protect	*/
+#define CONFIG_CMD_IMLS		/* List all found images	*/
+#endif
+```
+
+2. 修改board/samsung/tiny6410/tiny6410.c文件，将以下代码删除board_flash_get_legacy函数或添加如下预编译命令
+```c
+#ifndef CONFIG_SYS_NO_FLASH
+ulong board_flash_get_legacy (ulong base, int banknum, flash_info_t *info)
+{
+	if (banknum == 0) {	/* non-CFI boot flash */
+		info->portwidth = FLASH_CFI_16BIT;
+		info->chipwidth = FLASH_CFI_BY16;
+		info->interface = FLASH_CFI_X16;
+		return 1;
+	} else
+		return 0;
+}
+#endif
+```
+
+## 2020/03/05 - 链接地址对比
 
 以下链接地址有两个选项：
 - 0x57e00000 uboot源码中默认的地址
