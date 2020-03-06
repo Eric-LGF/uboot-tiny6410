@@ -290,8 +290,6 @@ void nand_boot(void)
 	if (nand_chip.select_chip)
 		nand_chip.select_chip(&nand_info, -1);
 
-	led_test(0);
-
 	/*
 	 * Jump to U-Boot image
 	 */

@@ -46,17 +46,6 @@
 
 _TEXT_BASE:
 	.word	CONFIG_SYS_TEXT_BASE
-	.globl	led_test
-led_test:
-	mov	r12, lr
-	
-	ldr	r1, =0x7F008808
-	@ ldr	r1, =0
-	str	r0, [r1]
-
-	mov	lr, r12
-	mov	pc, lr
-
 	.globl lowlevel_init
 lowlevel_init:
 	mov	r12, lr
