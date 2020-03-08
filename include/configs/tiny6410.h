@@ -32,6 +32,8 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+#define CONFIG_SYS_NO_FLASH		/* 该宏需要定义在 #include <config_cmd_default.h> 这条语句前 */
+
 /*
  * High Level Configuration Options
  * (easy to change)
@@ -178,14 +180,9 @@
 #define PHYS_SDRAM_1		CONFIG_SYS_SDRAM_BASE	/* SDRAM Bank #1	*/
 #define PHYS_SDRAM_1_SIZE	0x08000000	/* 128 MB in Bank #1	*/
 
-#define CONFIG_SYS_FLASH_BASE		0x10000000
-#define CONFIG_SYS_MONITOR_BASE	0x00000000
-
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
-// #define CONFIG_SYS_NO_FLASH 		// 在board/samsung/tiny6410/config.mk中定义
-
 
 #define CONFIG_ENV_SIZE		0x4000	/* Total Size of Environment Sector */
 

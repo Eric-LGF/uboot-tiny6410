@@ -1,5 +1,18 @@
 # 移植过程中，出现的一些问题记录
 
+## 2020/03/08 - 修复定义宏定义CONFIG_SYS_NO_FLASH，造成uboot编译报错问题；第二种办法
+
+1. 先取消上一版本的方法，删除board/samsung/tiny6410/config.mk如下语句：
+```makefile
+PLATFORM_CPPFLAGS += -DCONFIG_SYS_NO_FLASH
+```
+
+2. 修改include/configs/tiny6410.h，添加如下宏定义：
+```c
+#define CONFIG_SYS_NO_FLASH		/* 该宏需要定义在 #include <config_cmd_default.h> 这条语句前 */
+```
+
+
 ## 2020/03/06 - 修复定义宏定义CONFIG_SYS_NO_FLASH，造成uboot编译报错问题
 
 ### 问题描述

@@ -631,6 +631,11 @@
     },
     "files.associations": {
         "common.h": "c",
-        "config.h": "c"
+        "config.h": "c",
+        "environment.h": "c",
+        "config_cmd_defaults.h": "c",
+        "config_defaults.h": "c",
+        "tiny6410.h": "c",
+        "config_cmd_default.h": "c"
     }
 }
