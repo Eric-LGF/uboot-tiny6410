@@ -26,6 +26,11 @@
 
 CONFIG_NAND_SPL	= y
 
+SD_BOOT = n
+ifdef CONFIG_BOOT_MOVINAND
+SD_BOOT := y
+endif
+
 include $(TOPDIR)/config.mk
 include $(TOPDIR)/nand_spl/board/$(BOARDDIR)/config.mk
 
@@ -38,8 +43,11 @@ AFLAGS	+= -DCONFIG_NAND_SPL
 CFLAGS	+= -DCONFIG_NAND_SPL -ffunction-sections
 
 SOBJS	= start.o cpu_init.o lowlevel_init.o crt0.o
+ifeq ($(SD_BOOT),y)
 COBJS	= nand_boot.o nand_ecc.o s3c64xx.o tiny6410_nand_spl.o nand_base.o
-
+else
+COBJS	= tiny6410_sd_spl.o
+endif
 SRCS	:= $(addprefix $(obj),$(SOBJS:.o=.S) $(COBJS:.o=.c))
 OBJS	:= $(addprefix $(obj),$(SOBJS) $(COBJS))
 __OBJS	:= $(SOBJS) $(COBJS)
@@ -106,6 +114,10 @@ $(obj)nand_base.c:
 	@rm -f $@
 	@ln -s $(TOPDIR)/drivers/mtd/nand/nand_base.c $@
 #########################################################################
+
+$(obj)tiny6410_sd_spl.c:
+	@rm -f $@
+	@ln -s $(TOPDIR)/board/$(BOARDDIR)/tiny6410_sd_spl.c $@
 
 $(obj)%.o:	$(obj)%.S
 	$(CC) $(AFLAGS) -c -o $@ $<

@@ -71,9 +71,11 @@
  */
 
 #if defined(CONFIG_NAND_SPL)
-
+#if defined(CONFIG_BOOT_MOVINAND)
+.globl sd_boot
+#else
 .globl nand_boot
-
+#endif
 #elif ! defined(CONFIG_SPL_BUILD)
 
 .globl board_init_r
@@ -102,6 +104,7 @@ _main:
 #if defined(CONFIG_NAND_SPL)
 	/* deprecated, use instead CONFIG_SPL_BUILD */
 	ldr	sp, =(CONFIG_SYS_INIT_SP_ADDR)
+	bl	sd_boot
 	b	here
 #elif defined(CONFIG_SPL_BUILD) && defined(CONFIG_SPL_STACK)
 	ldr	sp, =(CONFIG_SPL_STACK)
@@ -156,9 +159,15 @@ clbss_l:cmp	r0, r1			/* while not at end of BSS */
 #endif
 
 #if defined(CONFIG_NAND_SPL)
-
+#if defined(CONFIG_BOOT_MOVINAND)
+	mov	r0, #0x10
+	bl	led_test
+	@ ldr		pc, =sd_boot
+	bl	sd_boot
+#else
 	/* call _nand_boot() */
 	ldr     pc, =nand_boot
+#endif
 
 #else
 

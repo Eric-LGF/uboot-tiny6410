@@ -36,7 +36,7 @@ SECTIONS
 	{
 	  start.o	(.text)
 	  cpu_init.o	(.text)
-	  nand_boot.o	(.text)
+	  tiny6410_sd_spl.o	(.text)
 
 	  *(.text)
 	}
