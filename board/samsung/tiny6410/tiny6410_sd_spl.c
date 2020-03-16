@@ -1,8 +1,5 @@
 #include <common.h>
 
-#define HM_CONTROL4     *((volatile unsigned int*)(0x8C))
-
-
 #define HSMMC_CHANNEL		0
 
 #define	TCM_BASE		0x0C004000
@@ -45,20 +42,17 @@
 
 void movi_bl2_copy(void)
 {
-    HM_CONTROL4 = HM_CONTROL4 | (0x3 << 16);
-    led_test(0x30);
 	CopyMovitoMem(HSMMC_CHANNEL, MOVI_BL2_POS, MOVI_BL2_BLKCNT, (uint *)BL2_BASE, MOVI_INIT_REQUIRED);
 }
 
 void sd_boot(void)
 {
     __attribute__((noreturn)) void (*uboot)(void);
-    led_test(0xc0);
+
     movi_bl2_copy();
 	/*
 	 * Jump to U-Boot image
 	 */
-    led_test(0xf0);
 	uboot = (void *)BL2_BASE;
 	(*uboot)();
 }

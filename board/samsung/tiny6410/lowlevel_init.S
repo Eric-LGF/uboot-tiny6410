@@ -47,13 +47,6 @@
 _TEXT_BASE:
 	.word	CONFIG_SYS_TEXT_BASE
 	.globl lowlevel_init
-	.globl led_test
-led_test:
-	ldr r1, =ELFIN_GPIO_BASE
-	str r0, [r1, #GPKDAT_OFFSET]
-	
-	mov	pc, lr
-
 lowlevel_init:
 	mov	r12, lr
 
