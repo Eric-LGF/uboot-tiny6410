@@ -26,10 +26,9 @@
 
 CONFIG_NAND_SPL	= y
 
-SD_BOOT = n
-ifdef CONFIG_BOOT_MOVINAND
-SD_BOOT := y
-endif
+# 将SD_BOOT设置为y，将编译出从SD启动的SPL
+# 将SD_BOOT设置为n，将编译出从NAND启动的SPL
+SD_BOOT = y
 
 include $(TOPDIR)/config.mk
 include $(TOPDIR)/nand_spl/board/$(BOARDDIR)/config.mk
@@ -42,8 +41,13 @@ LDFLAGS := -T $(nandobj)u-boot.lds -Ttext $(CONFIG_SYS_TEXT_BASE) $(LDFLAGS) \
 AFLAGS	+= -DCONFIG_NAND_SPL
 CFLAGS	+= -DCONFIG_NAND_SPL -ffunction-sections
 
+ifeq ($(SD_BOOT), y)
+AFLAGS	+= -DCONFIG_SD_SPL
+CFLAGS	+= -DCONFIG_SD_SPL
+endif
+
 SOBJS	= start.o cpu_init.o lowlevel_init.o crt0.o
-ifeq ($(SD_BOOT),y)
+ifneq ($(SD_BOOT),y)
 COBJS	= nand_boot.o nand_ecc.o s3c64xx.o tiny6410_nand_spl.o nand_base.o
 else
 COBJS	= tiny6410_sd_spl.o

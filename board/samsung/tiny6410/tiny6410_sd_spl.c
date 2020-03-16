@@ -21,7 +21,7 @@
 /* movinand definitions */
 #define MOVI_BLKSIZE		512
 
-#ifdef CONFIG_BOOT_MOVINAND
+#ifdef CONFIG_SD_SPL
 #define MOVI_TOTAL_BLKCNT	*((volatile unsigned int*)(TCM_BASE - 0x4))
 #define MOVI_HIGH_CAPACITY	*((volatile unsigned int*)(TCM_BASE - 0x8))
 #else
@@ -48,8 +48,9 @@ void movi_bl2_copy(void)
 void sd_boot(void)
 {
     __attribute__((noreturn)) void (*uboot)(void);
-
+led_test(0xe);
     movi_bl2_copy();
+	led_test(0xc);
 	/*
 	 * Jump to U-Boot image
 	 */
@@ -60,4 +61,10 @@ void sd_boot(void)
 void board_init_f(unsigned long bootflag)
 {
 	
+}
+
+#include <asm/arch/s3c6400.h>
+void led_test(unsigned int s)
+{
+    GPKDAT_REG = s<<4;
 }

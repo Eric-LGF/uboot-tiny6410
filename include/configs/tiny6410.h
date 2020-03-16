@@ -260,7 +260,6 @@
 /* Boot configuration (define only one of next 3) */
 #define CONFIG_BOOT_NAND
 
-#define CONFIG_BOOT_MOVINAND
 /* None of these are currently implemented. Left from the original Samsung
  * version for reference
 #define CONFIG_BOOT_NOR

@@ -71,7 +71,7 @@
  */
 
 #if defined(CONFIG_NAND_SPL)
-#if defined(CONFIG_BOOT_MOVINAND)
+#if defined(CONFIG_SD_SPL)
 .globl sd_boot
 #else
 .globl nand_boot
@@ -158,7 +158,7 @@ clbss_l:cmp	r0, r1			/* while not at end of BSS */
 #endif
 
 #if defined(CONFIG_NAND_SPL)
-#if defined(CONFIG_BOOT_MOVINAND)
+#if defined(CONFIG_SD_SPL)
 	ldr		pc, =sd_boot
 #else
 	/* call _nand_boot() */

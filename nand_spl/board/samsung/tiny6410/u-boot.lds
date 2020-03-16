@@ -36,7 +36,6 @@ SECTIONS
 	{
 	  start.o	(.text)
 	  cpu_init.o	(.text)
-	  tiny6410_sd_spl.o	(.text)
 
 	  *(.text)
 	}
