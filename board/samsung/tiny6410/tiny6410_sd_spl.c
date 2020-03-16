@@ -3,7 +3,7 @@
 #define HM_CONTROL4     *((volatile unsigned int*)(0x8C))
 
 
-#define HSMMC_CHANNEL		1
+#define HSMMC_CHANNEL		0
 
 #define	TCM_BASE		0x0C004000
 #define BL2_BASE		CONFIG_SYS_PHY_UBOOT_BASE
@@ -47,7 +47,7 @@ void movi_bl2_copy(void)
 {
     HM_CONTROL4 = HM_CONTROL4 | (0x3 << 16);
     led_test(0x30);
-	CopyMovitoMem(HSMMC_CHANNEL, 0, MOVI_BL2_BLKCNT, (uint *)BL2_BASE, MOVI_INIT_REQUIRED);
+	CopyMovitoMem(HSMMC_CHANNEL, MOVI_BL2_POS, MOVI_BL2_BLKCNT, (uint *)BL2_BASE, MOVI_INIT_REQUIRED);
 }
 
 void sd_boot(void)

@@ -226,7 +226,7 @@ wait_for_async:
 	str	r1, [r0, #MPLL_CON_OFFSET]
 
 	/* FOUT of EPLL is 96MHz */
-	ldr	r1, =0x200203
+	ldr	r1, =0x80200102
 	str	r1, [r0, #EPLL_CON0_OFFSET]
 	ldr	r1, =0x0
 	str	r1, [r0, #EPLL_CON1_OFFSET]

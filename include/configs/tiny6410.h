@@ -258,7 +258,7 @@
 				 56, 57, 58, 59, 60, 61, 62, 63}
 
 /* Boot configuration (define only one of next 3) */
-// #define CONFIG_BOOT_NAND
+#define CONFIG_BOOT_NAND
 
 #define CONFIG_BOOT_MOVINAND
 /* None of these are currently implemented. Left from the original Samsung
