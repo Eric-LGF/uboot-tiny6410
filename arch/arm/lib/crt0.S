@@ -159,10 +159,10 @@ clbss_l:cmp	r0, r1			/* while not at end of BSS */
 
 #if defined(CONFIG_NAND_SPL)
 #if defined(CONFIG_SD_SPL)
-	ldr		pc, =sd_boot
+	b	sd_boot
 #else
 	/* call _nand_boot() */
-	ldr     pc, =nand_boot
+	b	nand_boot
 #endif
 
 #else

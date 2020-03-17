@@ -26,7 +26,5 @@ sinclude $(OBJTREE)/board/$(BOARDDIR)/config.tmp
 ifndef CONFIG_NAND_SPL
 CONFIG_SYS_TEXT_BASE = $(RAM_TEXT)
 else
-# CONFIG_SYS_TEXT_BASE = 0
-# sd卡启动中使用基地址0，系统启动不起来
-CONFIG_SYS_TEXT_BASE = 0x0c000000	
+CONFIG_SYS_TEXT_BASE = 0
 endif
